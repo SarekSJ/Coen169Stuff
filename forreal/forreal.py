@@ -28,9 +28,9 @@ def collect_user_preliminary_data():
                                              }
                             }
     :returns:
-        sucking_dicts_aint_gay: dictionary containing user info and ratings to base predictions off of
+        train_users: dictionary containing user info and ratings to base predictions off of
     """
-    sucking_dicts_aint_gay = {}
+    train_users = {}
 
 
     with open ('test5.txt') as f:
@@ -38,12 +38,12 @@ def collect_user_preliminary_data():
             split_line = line.split(' ')
             try:
                 if split_line[2][0:1] != '0':
-                    sucking_dicts_aint_gay[int(split_line[0])][int(split_line[1])] = int(split_line[2][0:1])
+                    train_users[int(split_line[0])][int(split_line[1])] = int(split_line[2][0:1])
             except Exception as e:
-                sucking_dicts_aint_gay[int(split_line[0])] = {}
+                train_users[int(split_line[0])] = {}
                 if split_line[2][0:1] != '0':
-                    sucking_dicts_aint_gay[int(split_line[0])][int(split_line[1])] = int(split_line[2][0:1])
-    return sucking_dicts_aint_gay
+                    train_users[int(split_line[0])][int(split_line[1])] = int(split_line[2][0:1])
+    return train_users
 
 users = collect_user_preliminary_data()
 train_users = gather_data_from_training()
@@ -100,6 +100,8 @@ def find_similar_users(test_users, training_users):
             for train_user in similar_users[user_id]:
                 print(user_id, train_user)
                 similar_users[user_id][train_user] = generate_cosine_similarity(test_users, training_users, user_id, train_user)
+    for user_id, movies_dict in test_users.items():
+        similar_users[user_id]={k:v for k, v in similar_users[user_id].items() if v }
     return similar_users
 
 similar_users = find_similar_users(users, train_users)

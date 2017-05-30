@@ -22,7 +22,7 @@ Files:
       collect_user_preliminary_data():
         Collects info from current users to compare against users in train.txt
         Data structure here is a dictionary as follows:
-          sucking_dicts_aint_gay = {
+          train_users = {
                                       'user_id': {
                                                     'movie_id': rating,
                                                     'movie_id2': rating2,
