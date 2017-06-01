@@ -6,18 +6,24 @@ def gather_data_from_training():
     users = []
     users.append([]) # This is to offset the indexing by one, allows us to just call users[user_id] without needing to
                      # subtract 1.
-
+    train_user_averages = {}
     with open('train.txt') as f:
         for index, line in enumerate(f):
+            non_zero_ratings = 0
             split_line = line.split()
             users.append([-1])
+            train_user_averages[index+1] = 0
             for count, rating in enumerate(split_line):
                 users[index+1].append(int(rating))
-    return users
+                if rating != '0':
+                    train_user_averages[index+1] += int(rating)
+                    non_zero_ratings += 1
+            train_user_averages[index+1] = train_user_averages[index+1] / non_zero_ratings
+    return users, train_user_averages
 
 def collect_user_preliminary_data(current_file):
     """
-    sucking_dict_aint_gay = {
+    test_user_data = {
                                 'user_id_1': {
                                                 '145': 4,
                                                 '256': 3,
@@ -31,18 +37,31 @@ def collect_user_preliminary_data(current_file):
     :returns:
         train_users: dictionary containing user info and ratings to base predictions off of
     """
-    train_users = {}
+    test_users = {}
+    test_user_averages = {}
     with open (current_file) as f:
         for line in f:
             split_line = line.split(' ')
+            user_id = int(split_line[0])
+            movie_id = int(split_line[1])
+            rating = int(split_line[2])
             try:
-                if split_line[2][0:1] != '0':
-                    train_users[int(split_line[0])][int(split_line[1])] = int(split_line[2][0:1])
+                if rating != 0:
+                    test_users[user_id][movie_id] = rating
+                    test_user_averages[user_id] += rating
             except Exception as e:
-                train_users[int(split_line[0])] = {}
-                if split_line[2][0:1] != '0':
-                    train_users[int(split_line[0])][int(split_line[1])] = int(split_line[2][0:1])
-    return train_users
+                test_users[user_id] = {}
+                test_user_averages[user_id] = 0
+                if rating != 0:
+                    test_users[user_id][movie_id] = rating
+                    test_user_averages[user_id] += rating
+    for user, average_rating in test_user_averages.items():
+        test_user_averages[user] = average_rating / len(test_users[user])
+    return test_users, test_user_averages
+
+def preprocess_datasets(test_users, test_user_averages, train_users, train_user_averages):
+    pass
+
 
 def generate_cosine_similarity(users, training_data, user_index, train_index):
     # users[user_index] = dictionary of all the ratings they have
@@ -140,10 +159,10 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, similar_users
 def main_loop():
     files = ['test5.txt', 'test10.txt', 'test20.txt']
     for file in files:
-        test_users = collect_user_preliminary_data(file)
-        train_users = gather_data_from_training()
-        users_with_movie_ratings = find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, train_users)
-        # pprint.pprint(similar_users)
-        generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, file)
+        test_users, test_users_averages = collect_user_preliminary_data(file)
+        train_users, train_users_averages = gather_data_from_training()
+        # users_with_movie_ratings = find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, train_users)
+        # # pprint.pprint(similar_users)
+        # generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, file)
 
 main_loop()
