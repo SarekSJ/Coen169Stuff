@@ -76,7 +76,7 @@ def generate_cosine_similarity(users, training_data, user_index, train_index):
         else:
             return numerator / ((math.sqrt(train_den)) * (math.sqrt(test_den)))
 
-def find_similar_users(test_users, training_users):
+def find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, training_users):
     similar_users = {}
     # Similar Users will have the following structure (might be redundant):
     # similar_users = { 'user_id':
@@ -103,7 +103,7 @@ def find_similar_users(test_users, training_users):
         similar_users[user_id]={k:v for k, v in similar_users[user_id].items() if v}
     return similar_users
 
-def traverse_and_write_to_file(train_users, test_users, similar_users, current_file):
+def generate_rating_and_write_to_file(train_users, test_users, similar_users, current_file):
     with open ('testestest.txt','w'):
         pass
     with open (current_file) as f:
@@ -129,7 +129,8 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, similar_users
             if train_users[int(similar_user)][int(movie_id)] == 0:
                 continue
             else:
-                numerator += train_users[int(similar_user)][int(movie_id)] * similarity
+                rating = train_users[int(similar_user)][int(movie_id)]
+                numerator += (rating * similarity)
                 denominator += similarity
     # print (numerator/denominator)
     if denominator == 0 or int(numerator/denominator) == 0:
@@ -141,8 +142,8 @@ def main_loop():
     for file in files:
         test_users = collect_user_preliminary_data(file)
         train_users = gather_data_from_training()
-        similar_users = find_similar_users(test_users, train_users)
+        users_with_movie_ratings = find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, train_users)
         # pprint.pprint(similar_users)
-        traverse_and_write_to_file(train_users, test_users, similar_users, file)
+        generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, file)
 
 main_loop()
