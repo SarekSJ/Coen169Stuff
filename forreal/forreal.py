@@ -59,15 +59,25 @@ def collect_user_preliminary_data(current_file):
         test_user_averages[user] = average_rating / len(test_users[user])
     return test_users, test_user_averages
 
+
 def preprocess_datasets(test_users, test_user_averages, train_users, train_user_averages):
-    pass
+    # The goal here is to bring the data in these data structures to a base line
+    # accomplished by subtracting out the average from each rating
+    for user_id, user_ratings in enumerate(train_users):
+        for count, rating in enumerate(user_ratings):
+            if rating != 0:
+                user_ratings[count] -= train_user_averages[user_id]
+    for user, movies in test_users.items():
+        for movie, rating in movies.items():
+            test_users[user][movie] -= test_user_averages[user]
+    return test_users, train_users
 
 
 def generate_cosine_similarity(users, training_data, user_index, train_index):
     # users[user_index] = dictionary of all the ratings they have
     # ex: users[user_index] = {'237': 4, '306': 5, ... , '934': 5}
     train_user_ratings = []
-    test_user_ratings  = []
+    test_user_ratings = []
     numerator = 0
 
     for movie, rating in users[user_index].items():
@@ -114,7 +124,7 @@ def find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, trai
             for train_user_index in range(1,201):
                 if training_users[train_user_index][int(movie)] != 0:
                     # Then we can consider their similarity, add them to the list of users who rated the same movies
-                    similar_users[user_id][train_user_index] = .4
+                    similar_users[user_id][train_user_index] = 0
             for train_user in similar_users[user_id]:
                 similar_users[user_id][train_user] = generate_cosine_similarity(test_users, training_users, user_id, train_user)
     # Will get rid of any entry where there's no usable cosine similarity
@@ -122,23 +132,34 @@ def find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, trai
         similar_users[user_id]={k:v for k, v in similar_users[user_id].items() if v}
     return similar_users
 
-def generate_rating_and_write_to_file(train_users, test_users, similar_users, current_file):
+def generate_rating_and_write_to_file(train_users, test_users, similar_users, test_averages, current_file):
     with open ('testestest.txt','w'):
         pass
     with open (current_file) as f:
-        for line in f:
+        file = f.readlines()
+        last = file[-1]
+        for index, line in enumerate(file):
+
             split_line = line.split()
-            if split_line[2] == '0':
-                split_line[2] = str(generate_rating_for_movie(split_line[1], train_users,
-                                                                         split_line[0], similar_users))
+            rating = int(split_line[2])
+            movie_id = int(split_line[1])
+            user_id = int(split_line[0])
+
+            if rating == 0:
+                rating = str(generate_rating_for_movie(movie_id, train_users, user_id, test_averages, similar_users))
+                with open ('testestest.txt','a') as fo:
+                    if line == last:
+                        print ('it worked!')
+                        fo.write(str(user_id)+' ' +str(movie_id)+' '+ str(rating))
+                    else:
+                        fo.write(str(user_id)+' ' +str(movie_id)+' '+ str(rating)+ '\n')
+
             else:
                 pass
-            with open ('testestest.txt','a') as fo:
-                fo.write(str(split_line[0])+' ' +str(split_line[1])+' '+ str(split_line[2])+ '\n')
     os.rename('testestest.txt', current_file)
 
 
-def generate_rating_for_movie(movie_id, train_users, test_user_id, similar_users):
+def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages, similar_users):
     numerator = 0
     denominator = 0
     # print(similar_users)
@@ -152,17 +173,24 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, similar_users
                 numerator += (rating * similarity)
                 denominator += similarity
     # print (numerator/denominator)
-    if denominator == 0 or int(numerator/denominator) == 0:
+    add_back_in_rating = test_averages[test_user_id]
+    if denominator == 0:
         return 1
-    return int(numerator / denominator)
+    final_prediction = round(numerator/denominator + add_back_in_rating)
+    if final_prediction <= 0:
+        return 1
+    if final_prediction > 5:
+        return 5
+    return final_prediction
+
 
 def main_loop():
-    files = ['test5.txt', 'test10.txt', 'test20.txt']
+    files = ['test10.txt','test20.txt']
     for file in files:
         test_users, test_users_averages = collect_user_preliminary_data(file)
         train_users, train_users_averages = gather_data_from_training()
-        # users_with_movie_ratings = find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, train_users)
-        # # pprint.pprint(similar_users)
-        # generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, file)
+        test_users, train_users = preprocess_datasets(test_users,test_users_averages,train_users,train_users_averages)
+        users_with_movie_ratings = find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, train_users)
+        generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, test_users_averages, file)
 
 main_loop()
