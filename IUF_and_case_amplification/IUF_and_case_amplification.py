@@ -1,10 +1,10 @@
-# TODO: ALl of this lol
 import pprint
 import math
 import os
 
 def gather_data_from_training():
     users = []
+    IUF_scores = [0] * 1001 # It'll represent each movie
     users.append([]) # This is to offset the indexing by one, allows us to just call users[user_id] without needing to
                      # subtract 1.
     train_user_averages = {}
@@ -18,9 +18,17 @@ def gather_data_from_training():
                 users[index+1].append(int(rating))
                 if rating != '0':
                     train_user_averages[index+1] += int(rating)
+                    IUF_scores[count + 1] += 1 # Will keep track of how many users rated this movie
                     non_zero_ratings += 1
             train_user_averages[index+1] = train_user_averages[index+1] / non_zero_ratings
-    return users, train_user_averages
+    for i in range(1001):
+        if i == 0:
+            continue
+        else:
+            num_ratings = IUF_scores[i]
+            IUF_scores[i] = (math.log(num_ratings + 1, 2)) * math.log(200/(num_ratings +1 ),2)
+        # print ("Movie ID: " +str(i) + "Score: " + str(IUF_scores[i]))
+    return users, train_user_averages, IUF_scores
 
 def collect_user_preliminary_data(current_file):
     """
@@ -135,7 +143,7 @@ def find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, trai
         similar_users[user_id]={k:v for k, v in similar_users[user_id].items() if v}
     return similar_users
 
-def generate_rating_and_write_to_file(train_users, test_users, similar_users, test_averages, current_file):
+def generate_rating_and_write_to_file(train_users, test_users, similar_users, test_averages, IUF_scores, current_file):
     with open ('testestest.txt','w'):
         pass
     with open (current_file) as f:
@@ -149,7 +157,7 @@ def generate_rating_and_write_to_file(train_users, test_users, similar_users, te
             user_id = int(split_line[0])
 
             if rating == 0:
-                rating = str(generate_rating_for_movie(movie_id, train_users, user_id, test_averages, similar_users))
+                rating = str(generate_rating_for_movie(movie_id, train_users, user_id, test_averages, similar_users, IUF_scores))
                 with open ('testestest.txt','a') as fo:
                     if line == last:
                         fo.write(str(user_id)+' ' +str(movie_id)+' '+ str(rating))
@@ -161,7 +169,7 @@ def generate_rating_and_write_to_file(train_users, test_users, similar_users, te
     os.rename('testestest.txt', current_file)
 
 
-def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages, similar_users):
+def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages, similar_users, IUF_scores):
     numerator = 0
     denominator = 0
     # print(similar_users)
@@ -172,8 +180,8 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages
                 continue
             else:
                 rating = train_users[int(similar_user)][int(movie_id)]
-                numerator += (rating * similarity)
-                denominator += similarity
+                numerator += (rating * (similarity ** 3) * IUF_scores[int(movie_id)]) # This is where we'll also incorporate IUF
+                denominator += (similarity)
     # print (numerator/denominator)
     add_back_in_rating = test_averages[test_user_id]
     if denominator == 0:
@@ -187,12 +195,13 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages
 
 
 def main_loop():
-    files = ['test5.txt']
+    files = ['test10.txt','test20.txt']
     for file in files:
         test_users, test_users_averages = collect_user_preliminary_data(file)
-        train_users, train_users_averages = gather_data_from_training()
+        train_users, train_users_averages, IUF_scores = gather_data_from_training()
         test_users, train_users = preprocess_datasets(test_users,test_users_averages,train_users,train_users_averages)
         users_with_movie_ratings = find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, train_users)
-        generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, test_users_averages, file)
+        generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, test_users_averages, IUF_scores,
+                                          file)
 
 main_loop()
