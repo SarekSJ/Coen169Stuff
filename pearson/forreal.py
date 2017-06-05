@@ -94,6 +94,8 @@ def generate_cosine_similarity(users, training_data, user_index, train_index):
     for i in range(len(test_user_ratings)):
         train_den += train_user_ratings[i] ** 2
         test_den += test_user_ratings[i] ** 2
+
+    denom = math.sqrt(train_den) * math.sqrt(test_den)
     if ((math.sqrt(train_den)) * (math.sqrt(test_den))) == 0:
         return 0
     else:
@@ -149,7 +151,6 @@ def generate_rating_and_write_to_file(train_users, test_users, similar_users, te
                 rating = str(generate_rating_for_movie(movie_id, train_users, user_id, test_averages, similar_users))
                 with open ('testestest.txt','a') as fo:
                     if line == last:
-                        print ('it worked!')
                         fo.write(str(user_id)+' ' +str(movie_id)+' '+ str(rating))
                     else:
                         fo.write(str(user_id)+' ' +str(movie_id)+' '+ str(rating)+ '\n')
@@ -185,7 +186,7 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages
 
 
 def main_loop():
-    files = ['test10.txt','test20.txt']
+    files = ['test5.txt']
     for file in files:
         test_users, test_users_averages = collect_user_preliminary_data(file)
         train_users, train_users_averages = gather_data_from_training()
