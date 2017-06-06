@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a4b58d48-9f46-430e-a828-a229ab0e3f66" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/item-based/item_based.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/item-based/test10.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/item-based/test20.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/item-based/test5.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/item-based/train.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IUF_and_case_amplification/IUF_and_case_amplification.py" afterPath="$PROJECT_DIR$/IUF_and_case_amplification/IUF_and_case_amplification.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IUF_and_case_amplification/test10.txt" afterPath="$PROJECT_DIR$/IUF_and_case_amplification/test10.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IUF_and_case_amplification/test20.txt" afterPath="$PROJECT_DIR$/IUF_and_case_amplification/test20.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IUF_and_case_amplification/test5.txt" afterPath="$PROJECT_DIR$/IUF_and_case_amplification/test5.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/item-based/test10.txt" afterPath="$PROJECT_DIR$/item-based/test10.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/item-based/test20.txt" afterPath="$PROJECT_DIR$/item-based/test20.txt" />
     </list>
     <ignored path="Coen169.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,11 +32,51 @@
       <file leaf-file-name="IUF_and_case_amplification.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/IUF_and_case_amplification/IUF_and_case_amplification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+            <state vertical-scroll-proportion="21.962963">
+              <caret line="142" column="80" selection-start-line="142" selection-start-column="80" selection-end-line="142" selection-end-column="80" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test5.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/IUF_and_case_amplification/test5.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test5.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pearson/test5.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.36585367">
+              <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test5.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/item-based/test5.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test10.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pearson/test10.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="9" selection-start-line="0" selection-start-column="9" selection-end-line="0" selection-end-column="9" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -45,7 +85,7 @@
         <entry file="file://$PROJECT_DIR$/item-based/item_based.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="208" column="23" selection-start-line="208" selection-start-column="23" selection-end-line="208" selection-end-column="23" />
+              <caret line="208" column="24" selection-start-line="208" selection-start-column="24" selection-end-line="208" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -56,16 +96,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="16" column="32" selection-start-line="16" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test5.txt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/item-based/test5.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -87,8 +117,10 @@
         <option value="$PROJECT_DIR$/forreal/forreal.py" />
         <option value="$PROJECT_DIR$/Item-Based/test5.txt" />
         <option value="$PROJECT_DIR$/Item-Based/item_based.py" />
-        <option value="$PROJECT_DIR$/IUF_and_case_amplification/IUF_and_case_amplification.py" />
         <option value="$PROJECT_DIR$/item-based/item_based.py" />
+        <option value="$PROJECT_DIR$/IUF_and_case_amplification/IUF_and_case_amplification.py" />
+        <option value="$PROJECT_DIR$/item-based/test5.txt" />
+        <option value="$PROJECT_DIR$/pearson/test5.txt" />
       </list>
     </option>
   </component>
@@ -253,7 +285,7 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="item_based" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="doesnt_exist" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -429,14 +461,14 @@
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.forreal" />
       <item index="1" class="java.lang.String" itemvalue="Python.random_ratings" />
-      <item index="2" class="java.lang.String" itemvalue="Python.item_based" />
+      <item index="2" class="java.lang.String" itemvalue="Python.doesnt_exist" />
       <item index="3" class="java.lang.String" itemvalue="Python.IUF_and_case_amplification" />
       <item index="4" class="java.lang.String" itemvalue="Python.item_based (1)" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.item_based (1)" />
-        <item index="1" class="java.lang.String" itemvalue="Python.item_based" />
+        <item index="1" class="java.lang.String" itemvalue="Python.doesnt_exist" />
         <item index="2" class="java.lang.String" itemvalue="Python.IUF_and_case_amplification" />
         <item index="3" class="java.lang.String" itemvalue="Python.forreal" />
         <item index="4" class="java.lang.String" itemvalue="Python.random_ratings" />
@@ -655,43 +687,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pearson/test10.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test5.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-19.155052">
           <caret line="1" column="9" selection-start-line="1" selection-start-column="9" selection-end-line="1" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/IUF_and_case_amplification/IUF_and_case_amplification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/IUF_and_case_amplification/test5.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pearson/test5.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -712,10 +711,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pearson/test10.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="9" selection-start-line="0" selection-start-column="9" selection-end-line="0" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/IUF_and_case_amplification/IUF_and_case_amplification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="21.962963">
+          <caret line="142" column="80" selection-start-line="142" selection-start-column="80" selection-end-line="142" selection-end-column="80" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/item-based/item_based.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="208" column="23" selection-start-line="208" selection-start-column="23" selection-end-line="208" selection-end-column="23" />
+          <caret line="208" column="24" selection-start-line="208" selection-start-column="24" selection-end-line="208" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/IUF_and_case_amplification/test5.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -724,6 +749,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pearson/test5.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36585367">
+          <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
           <folding />
         </state>
       </provider>

@@ -26,10 +26,9 @@ def gather_data_from_training():
             continue
         else:
             num_ratings = IUF_scores[i]
-            # print (num_ratings)
-
-            IUF_scores[i] = math.log(200/(num_ratings + 1))
-            print (IUF_scores[i])
+            if (num_ratings == 0):
+                num_ratings = 1
+            IUF_scores[i] = math.log((len(users) - 1)/(num_ratings))
         # print ("Movie ID: " +str(i) + "Score: " + str(IUF_scores[i]))
     return users, train_user_averages, IUF_scores
 
@@ -140,7 +139,8 @@ def find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, trai
                     # Then we can consider their similarity, add them to the list of users who rated the same movies
                     similar_users[user_id][train_user_index] = 0
             for train_user in similar_users[user_id]:
-                similar_users[user_id][train_user] = generate_cosine_similarity(test_users, training_users, user_id, train_user)
+                similar_users[user_id][train_user] = generate_cosine_similarity(test_users, training_users,
+                                                                                user_id, train_user)
     # Will get rid of any entry where there's no usable cosine similarity
     for user_id, movies_dict in test_users.items():
         similar_users[user_id]={k:v for k, v in similar_users[user_id].items() if v}
@@ -183,9 +183,12 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages
                 continue
             else:
                 rating = train_users[int(similar_user)][int(movie_id)]
-                numerator += (rating * (similarity ** 3) * IUF_scores[int(movie_id)]) # This is where we'll also incorporate IUF
-                denominator += (similarity)
-    # print (numerator/denominator)
+                 # This is where we'll also incorporate IUF
+                new_weight = (similarity * IUF_scores[int(movie_id)])
+                new_weight = new_weight * (math.fabs(new_weight)) ** (2.5-1)
+                numerator += (rating * new_weight)
+                denominator += new_weight
+
     add_back_in_rating = test_averages[test_user_id]
     if denominator == 0:
         return 1
@@ -198,7 +201,7 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages
 
 
 def main_loop():
-    files = ['test10.txt','test20.txt']
+    files = ['test5.txt', 'test10.txt','test20.txt']
     for file in files:
         test_users, test_users_averages = collect_user_preliminary_data(file)
         train_users, train_users_averages, IUF_scores = gather_data_from_training()
