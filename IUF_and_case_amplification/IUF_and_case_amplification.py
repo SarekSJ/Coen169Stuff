@@ -26,7 +26,10 @@ def gather_data_from_training():
             continue
         else:
             num_ratings = IUF_scores[i]
-            IUF_scores[i] = (math.log(num_ratings + 1, 2)) * math.log(200/(num_ratings +1 ),2)
+            # print (num_ratings)
+
+            IUF_scores[i] = math.log(200/(num_ratings + 1))
+            print (IUF_scores[i])
         # print ("Movie ID: " +str(i) + "Score: " + str(IUF_scores[i]))
     return users, train_user_averages, IUF_scores
 
