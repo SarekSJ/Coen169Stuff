@@ -1,4 +1,5 @@
 import pprint
+from collections import Counter
 import math
 import os
 
@@ -28,7 +29,7 @@ def gather_data_from_training():
             num_ratings = IUF_scores[i]
             if (num_ratings == 0):
                 num_ratings = 1
-            IUF_scores[i] = math.log((len(users) - 1)/(num_ratings))
+            IUF_scores[i] = math.log(200 / (num_ratings))
         # print ("Movie ID: " +str(i) + "Score: " + str(IUF_scores[i]))
     return users, train_user_averages, IUF_scores
 
@@ -71,15 +72,17 @@ def collect_user_preliminary_data(current_file):
     return test_users, test_user_averages
 
 
-def preprocess_datasets(test_users, test_user_averages, train_users, train_user_averages):
+def preprocess_datasets(test_users, test_user_averages, train_users, train_user_averages, IUF_scores):
     # The goal here is to bring the data in these data structures to a base line
     # accomplished by subtracting out the average from each rating
     for user_id, user_ratings in enumerate(train_users):
         for count, rating in enumerate(user_ratings):
             if rating != 0:
+                user_ratings[count] *= IUF_scores[count]
                 user_ratings[count] -= train_user_averages[user_id]
     for user, movies in test_users.items():
         for movie, rating in movies.items():
+            test_users[user][movie] *= IUF_scores[movie]
             test_users[user][movie] -= test_user_averages[user]
     return test_users, train_users
 
@@ -120,17 +123,6 @@ def generate_cosine_similarity(users, training_data, user_index, train_index):
 
 def find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, training_users):
     similar_users = {}
-    # Similar Users will have the following structure (might be redundant):
-    # similar_users = { 'user_id':
-    #                       { 'user_with_rating_on_same_movie' : cosine_similarity(user_id, user_with_rating_on_same_movie),
-#                             'another_one': cosine_similarity(user_id, another_one),
-#                                           .
-#                                           .
-#                                           .
-#                             'final_one' : cosine_similarity(user_id, final_one)
-#                           },
-#                       'another_real_user':{ etc ... }
-#                       }
     for user_id, movies_dict in test_users.items():
         similar_users[user_id] = {}
         for movie, rating in movies_dict.items():
@@ -144,6 +136,11 @@ def find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, trai
     # Will get rid of any entry where there's no usable cosine similarity
     for user_id, movies_dict in test_users.items():
         similar_users[user_id]={k:v for k, v in similar_users[user_id].items() if v}
+        top_k = Counter(similar_users[user_id]).most_common(14)
+        similar_users[user_id] = {}
+        for element in top_k:
+            similar_users[user_id][element[0]] = element[1]
+    print(similar_users)
     return similar_users
 
 def generate_rating_and_write_to_file(train_users, test_users, similar_users, test_averages, IUF_scores, current_file):
@@ -184,7 +181,7 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages
             else:
                 rating = train_users[int(similar_user)][int(movie_id)]
                  # This is where we'll also incorporate IUF
-                new_weight = (similarity * IUF_scores[int(movie_id)])
+                new_weight = (similarity)
                 new_weight = new_weight * (math.fabs(new_weight)) ** (2.5-1)
                 numerator += (rating * new_weight)
                 denominator += new_weight
@@ -201,11 +198,11 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, test_averages
 
 
 def main_loop():
-    files = ['test5.txt', 'test10.txt','test20.txt']
+    files = ['test5.txt', 'test10.txt', 'test20.txt']
     for file in files:
         test_users, test_users_averages = collect_user_preliminary_data(file)
         train_users, train_users_averages, IUF_scores = gather_data_from_training()
-        test_users, train_users = preprocess_datasets(test_users,test_users_averages,train_users,train_users_averages)
+        test_users, train_users = preprocess_datasets(test_users,test_users_averages,train_users,train_users_averages, IUF_scores)
         users_with_movie_ratings = find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, train_users)
         generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, test_users_averages, IUF_scores,
                                           file)
