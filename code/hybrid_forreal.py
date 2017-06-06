@@ -58,7 +58,7 @@ def collect_user_preliminary_data(current_file):
         test_user_averages[user] = average_rating / len(test_users[user])
     return test_users, test_user_averages
 
-def preprocess_datasets(test_users, test_movie_averages, train_users, train_movie_averages):
+def preprocess_datasets_items(test_users, test_movie_averages, train_users, train_movie_averages):
     # The goal here is to bring the data in these data structures to a base line
     # accomplished by subtracting out the average from each rating
     for user_id, user_data in enumerate(train_users):
@@ -124,11 +124,10 @@ def find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, trai
         similar_users[user_id] = {}
         for element in top_k:
             similar_users[user_id][element[0]] = element[1]
-    print(similar_users)
     return similar_users
 
 
-def generate_rating_and_write_to_file(train_movies, test_movies, similar_movies, movie_averages, IUF_scores, current_file):
+def generate_rating_and_write_to_file(train_users, test_users, similar_users, movie_averages, test_averages, current_file):
     with open ('testestest.txt','w'):
         pass
     with open (current_file) as f:
@@ -142,7 +141,10 @@ def generate_rating_and_write_to_file(train_movies, test_movies, similar_movies,
             user_id = int(split_line[0])
 
             if rating == 0:
-                rating = str(generate_rating_for_movie(movie_id, train_movies, user_id, movie_averages, similar_movies, IUF_scores))
+                item_rating = generate_rating_for_movie_items(movie_id, train_users, user_id, movie_averages, similar_users)
+                user_rating = generate_rating_for_movie_users(movie_id, train_users, user_id, test_averages, similar_users)
+                rating = round(0.85 * user_rating + 0.15 * item_rating)
+                print (rating)
                 with open ('testestest.txt','a') as fo:
                     if line == last:
                         fo.write(str(user_id)+' ' +str(movie_id)+' '+ str(rating))
@@ -154,7 +156,28 @@ def generate_rating_and_write_to_file(train_movies, test_movies, similar_movies,
     os.rename('testestest.txt', current_file)
 
 
-def generate_rating_for_movie(movie_id, train_users, test_user_id, movie_averages, similar_users, IUF_scores):
+def generate_rating_for_movie_items(movie_id, train_users, test_user_id, movie_averages, similar_users):
+    numerator = 0
+    denominator = 0
+    for test_user, similarity_dict in similar_users.items():
+        for similar_user, similarity in similarity_dict.items():
+            if train_users[int(similar_user)][int(movie_id)] == 0:
+                continue
+            else:
+                rating = train_users[int(similar_user)][int(movie_id)]
+                numerator += (rating * similarity)
+                denominator += similarity
+    add_back_in_rating = movie_averages[test_user_id]
+    if denominator == 0:
+        return 1
+    final_prediction = round(numerator/denominator + add_back_in_rating)
+    if final_prediction <= 0:
+        return 1
+    if final_prediction > 5:
+        return 5
+    return final_prediction
+
+def generate_rating_for_movie_users(movie_id, train_users, test_user_id, test_averages, similar_users):
     numerator = 0
     denominator = 0
     # print(similar_users)
@@ -168,7 +191,7 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, movie_average
                 numerator += (rating * similarity)
                 denominator += similarity
     # print (numerator/denominator)
-    add_back_in_rating = movie_averages[test_user_id]
+    add_back_in_rating = test_averages[test_user_id]
     if denominator == 0:
         return 1
     final_prediction = round(numerator/denominator + add_back_in_rating)
@@ -178,15 +201,15 @@ def generate_rating_for_movie(movie_id, train_users, test_user_id, movie_average
         return 5
     return final_prediction
 
+
 def main_loop():
     files = ['test5.txt', 'test10.txt','test20.txt']
     for file in files:
         test_users, test_user_averages = collect_user_preliminary_data(file)
-        # train_movies, train_movies_averages, IUF_scores = gather_data_from_training()
         train_users, train_user_averages, train_movies_averages = gather_data_from_training()
-        test_users, train_users = preprocess_datasets(test_users,train_movies_averages,train_users,train_movies_averages)
+        test_users, train_users = preprocess_datasets_items(test_users,train_movies_averages,train_users,train_movies_averages)
         users_with_movie_ratings = find_users_with_movie_ratings_and_compute_cosine_similarity(test_users, train_users)
-        generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, train_movies_averages, train_user_averages,
+        generate_rating_and_write_to_file(train_users, test_users, users_with_movie_ratings, train_movies_averages, test_user_averages,
                                           file)
 
 main_loop()

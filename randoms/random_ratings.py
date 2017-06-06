@@ -1,3 +1,4 @@
+# This was just used to see what we'd get
 import random
 with open ('testestest.txt','w'):
     pass
